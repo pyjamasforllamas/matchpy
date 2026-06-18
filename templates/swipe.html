@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Discover Matches - MatchPy{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-white">Discover Matches</h2>
+        <p class="text-light">
+            Swipes Remaining:
+            <span class="badge bg-warning text-dark">
+                {{ remaining }}
+            </span>
+        </p>
+    </div>
+
+    {% if user %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                {% if user.photo %}
+                <img src="{{ url_for('uploaded_file', filename=user.photo) }}"
+                     class="card-img-top"
+                     style="height:550px; object-fit:cover;"
+                     alt="{{ user.username }}">
+                {% else %}
+                <img src="https://via.placeholder.com/600x550?text=No+Photo"
+                     class="card-img-top"
+                     style="height:550px; object-fit:cover;"
+                     alt="No Photo">
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h3 class="fw-bold">
+                        {{ user.username }}
+                        {% if user.age %}
+                        <span class="text-muted">, {{ user.age }}</span>
+                        {% endif %}
+                    </h3>
+
+                    {% if user.bio %}
+                    <p class="mt-3">
+                        {{ user.bio }}
+                    </p>
+                    {% endif %}
+
+                    {% if user.interests %}
+                    <div class="mb-3">
+                        {% for interest in user.interests.split(',') %}
+                        <span class="badge bg-primary me-1 mb-1">
+                            {{ interest.strip() }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+
+                        <button class="btn btn-danger btn-lg px-4"
+                                onclick="skipUser()">
+                            ❌ Pass
+                        </button>
+
+                        <button class="btn btn-success btn-lg px-4"
+                                onclick="likeUser({{ user.id }})">
+                            ❤️ Like
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="text-center mt-5">
+        <div class="card bg-dark text-white border-0 shadow-lg">
+            <div class="card-body py-5">
+                <h3>No More Profiles Available</h3>
+                <p>Check back later for new matches.</p>
+
+                <a href="{{ url_for('dashboard') }}"
+                   class="btn btn-primary">
+                    View Matches
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+function likeUser(userId) {
+
+    fetch(`/like/${userId}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.status === "limit_reached") {
+            alert("You've reached your daily swipe limit. Upgrade to Premium!");
+            return;
+        }
+
+        location.reload();
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Something went wrong.");
+    });
+}
+
+function skipUser() {
+
+    fetch('/pass/{{ user.id }}', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    });
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - MatchPy{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white">Your Matches</h2>
+        <p class="text-light">People you've liked</p>
+    </div>
+
+    {% if matches and matches|length > 0 %}
+
+        <div class="row g-4 justify-content-center">
+
+            {% for user in matches %}
+
+            <div class="col-md-4 col-lg-3">
+
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden h-100">
+
+                    {% if user.photo %}
+                        <img src="{{ url_for('uploaded_file', filename=user.photo) }}"
+                             class="card-img-top"
+                             style="height:250px; object-fit:cover;"
+                             alt="{{ user.username }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x250?text=No+Photo"
+                             class="card-img-top"
+                             style="height:250px; object-fit:cover;"
+                             alt="No Photo">
+                    {% endif %}
+
+                    <div class="card-body text-center">
+
+                        <h5 class="fw-bold mb-1">
+                            {{ user.username }}
+                            {% if user.age %}
+                                <span class="text-muted">, {{ user.age }}</span>
+                            {% endif %}
+                        </h5>
+
+                        {% if user.bio %}
+                            <p class="small text-muted mt-2">
+                                {{ user.bio[:80] }}{% if user.bio|length > 80 %}...{% endif %}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="text-center mt-5">
+            <div class="card bg-dark text-white border-0 shadow-lg">
+                <div class="card-body py-5">
+                    <h3>No Matches Yet</h3>
+                    <p>Start swiping to find people you like ❤️</p>
+
+                    <a href="{{ url_for('swipe') }}" class="btn btn-primary mt-3">
+                        Start Swiping
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

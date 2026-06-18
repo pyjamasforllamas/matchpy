@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }} - MatchPy{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center p-5">
+                {% if user.photo %}
+                    <img src="{{ url_for('uploaded_file', filename=user.photo) }}" class="rounded-circle mb-4" style="width: 200px; height: 200px; object-fit: cover;">
+                {% else %}
+                    <i class="fas fa-user-circle fa-10x text-secondary mb-4"></i>
+                {% endif %}
+                
+                <h2>{{ user.username }}, {{ user.age }}</h2>
+                <p class="text-muted">{{ user.gender }}</p>
+                
+                <hr>
+                <h5>Bio</h5>
+                <p>{{ user.bio or 'No bio provided.' }}</p>
+                
+                <h5>Interests</h5>
+                <p>{{ user.interests or 'None listed' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

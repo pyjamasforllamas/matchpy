@@ -1,0 +1,13 @@
+flask==3.0.3
+flask-sqlalchemy==3.1.1
+flask-login==0.6.3
+flask-wtf==1.2.1
+flask-socketio==5.4.1
+werkzeug==3.0.3
+stripe==10.0.0
+python-dotenv==1.0.1
+pillow==10.4.0
+gunicorn==23.0.0
+email-validator==2.2.0
+gevent==24.11.1
+gevent-websocket==0.10.1

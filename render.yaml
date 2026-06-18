@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: matchpy
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker app:app
