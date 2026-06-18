@@ -315,13 +315,17 @@ def google_verify():
     return app.send_static_file("google7c1580915c9a5453.html")
 
 # =====================
-# RUN (RENDER SAFE)
+# CREATE DATABASE TABLES
+# =====================
+
+with app.app_context():
+    db.create_all()
+
+# =====================
+# RUN
 # =====================
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
     port = int(os.environ.get("PORT", 10000))
 
     socketio.run(
