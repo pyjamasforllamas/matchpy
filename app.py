@@ -309,7 +309,9 @@ def stripe_webhook():
             db.session.commit()
 
     return "OK", 200
-
+@app.route("/google123abc456.html")
+def google_verify():
+    return app.send_static_file("google123abc456.html")
 
 # =====================
 # RUN (RENDER SAFE)
